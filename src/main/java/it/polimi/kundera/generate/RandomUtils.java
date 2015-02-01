@@ -1,17 +1,24 @@
 package it.polimi.kundera.generate;
 
-/**
- * @author Fabio Arcidiacono.
- */
+import java.util.Random;
+import java.util.UUID;
+
 public class RandomUtils {
 
-	public static String randomString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    private static Random random = null;
 
-	public static Long randomLong() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    private static Random random() {
+        if (random == null) {
+            random = new Random();
+        }
+        return random;
+    }
+
+    public static String randomString() {
+        return UUID.randomUUID().toString();
+    }
+
+    public static Long randomLong() {
+        return random().nextLong();
+    }
 }

@@ -19,39 +19,39 @@ import java.io.IOException;
 @NoArgsConstructor
 public class CleanServlet extends Controller {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Override
-	protected void get(Navigation nav) throws IOException, ServletException {
-		DeferredTask deferredTask;
-		Queue defaultQueue = QueueFactory.getDefaultQueue();
-		for (String table : PersistenceMetadata.getInstance().getPersistedTables()) {
-			deferredTask = new CleanTask(table);
-			defaultQueue.add(TaskOptions.Builder.withDefaults().payload(deferredTask));
-		}
-		nav.redirect(PagePath.INDEX);
-	}
+    @Override
+    protected void get(Navigation nav) throws IOException, ServletException {
+        DeferredTask deferredTask;
+        Queue defaultQueue = QueueFactory.getDefaultQueue();
+        for (String table : PersistenceMetadata.getInstance().getPersistedTables()) {
+            deferredTask = new CleanTask(table);
+            defaultQueue.add(TaskOptions.Builder.withDefaults().payload(deferredTask));
+        }
+        nav.redirect(PagePath.INDEX);
+    }
 
-	@Override
-	protected void post(Navigation nav) throws IOException, ServletException {
-		get(nav);
-	}
+    @Override
+    protected void post(Navigation nav) throws IOException, ServletException {
+        get(nav);
+    }
 }
 
 @Log
 @AllArgsConstructor
 class CleanTask implements DeferredTask {
 
-	private String table;
+    private String table;
 
-	@Override
-	public void run() {
-		log.info("deleting all entities from table [" + table + "]");
-		DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-		Query query = new Query(table).setKeysOnly();
-		for (Entity entity : datastore.prepare(query).asList(FetchOptions.Builder.withDefaults())) {
-			log.info("kind= [" + entity.getKind() + "], key =[" + entity.getKey() + "]");
-			datastore.delete(entity.getKey());
-		}
-	}
+    @Override
+    public void run() {
+        log.info("deleting all entities from table [" + table + "]");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query(table).setKeysOnly();
+        for (Entity entity : datastore.prepare(query).asList(FetchOptions.Builder.withDefaults())) {
+            log.info("kind= [" + entity.getKind() + "], key =[" + entity.getKey() + "]");
+            datastore.delete(entity.getKey());
+        }
+    }
 }

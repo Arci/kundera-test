@@ -29,17 +29,17 @@ import javax.persistence.*;
 @Table(name = "Phone", schema = "gae@pu")
 public class Phone implements Randomizable<Phone> {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "PHONE_ID")
-	private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "PHONE_ID")
+    private String id;
 
-	@Column(name = "NUMBER")
-	private Long number;
+    @Column(name = "NUMBER")
+    private Long number;
 
-	@Override
-	public Phone randomize() {
-		setNumber(RandomUtils.randomLong());
-		return this;
-	}
+    @Override
+    public Phone randomize() {
+        setNumber(RandomUtils.randomLong());
+        return this;
+    }
 }

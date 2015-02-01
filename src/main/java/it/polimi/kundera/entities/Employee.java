@@ -29,21 +29,21 @@ import javax.persistence.*;
 @Table(schema = "gae@pu")
 public class Employee implements Randomizable<Employee> {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "EMPLOYEE_ID")
-	private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "EMPLOYEE_ID")
+    private String id;
 
-	@Column(name = "NAME")
-	private String name;
+    @Column(name = "NAME")
+    private String name;
 
-	@Column(name = "SALARY")
-	private Long salary;
+    @Column(name = "SALARY")
+    private Long salary;
 
-	@Override
-	public Employee randomize() {
-		setName(RandomUtils.randomString());
-		setSalary(RandomUtils.randomLong());
-		return this;
-	}
+    @Override
+    public Employee randomize() {
+        setName(RandomUtils.randomString());
+        setSalary(RandomUtils.randomLong());
+        return this;
+    }
 }

@@ -29,27 +29,27 @@ import javax.persistence.*;
 @Table(name = "EmployeeOTO", schema = "gae@pu")
 public class EmployeeOTO implements Randomizable<EmployeeOTO> {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "EMPLOYEE_ID")
-	private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "EMPLOYEE_ID")
+    private String id;
 
-	@Column(name = "NAME")
-	private String name;
+    @Column(name = "NAME")
+    private String name;
 
-	@Column(name = "SALARY")
-	private Long salary;
+    @Column(name = "SALARY")
+    private Long salary;
 
-	/* an employee have one and only one phone */
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "PHONE_ID")
-	private Phone phone;
+    /* an employee have one and only one phone */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PHONE_ID")
+    private Phone phone;
 
-	@Override
-	public EmployeeOTO randomize() {
-		setName(RandomUtils.randomString());
-		setSalary(RandomUtils.randomLong());
-		setPhone(new Phone().randomize());
-		return this;
-	}
+    @Override
+    public EmployeeOTO randomize() {
+        setName(RandomUtils.randomString());
+        setSalary(RandomUtils.randomLong());
+        setPhone(new Phone().randomize());
+        return this;
+    }
 }
