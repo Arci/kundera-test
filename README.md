@@ -1,14 +1,12 @@
 # kundera-test
 The application provides a servlet to generate data and store them in Datastore through CPIM and Kundera GAE Datastore extension.
 
-To easily cleanup the datastore, a clean servlet is provided, it lunches a task in the default queue for each persisted table which erase all entities related.
+To easily cleanup the datastore a clean up servlet is provided, the servlet push a task on the default queue for each persisted table each task is then responsible of deleting all entities of the given table.
 
-A remote API servlet is also available.
-
+A remote API servlet is also available, see [web.xml](https://github.com/Arci/kundera-test/blob/master/src/main/webapp/WEB-INF/web.xml).
 
 ###Start the application
-To start the app, use the [App Engine Maven Plugin](http://code.google.com/p/appengine-maven-plugin/).
-Just run the command.
+To start the app just run the command:
 
 ```
 mvn appengine:devserver
