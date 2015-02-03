@@ -1,10 +1,7 @@
 package it.polimi.kundera.web.servlet;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.taskqueue.DeferredTask;
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-import com.google.appengine.api.taskqueue.TaskOptions;
+import com.google.appengine.api.taskqueue.*;
 import it.polimi.kundera.web.Controller;
 import it.polimi.kundera.web.Navigation;
 import it.polimi.kundera.web.PagePath;
@@ -27,7 +24,7 @@ public class CleanServlet extends Controller {
         Queue defaultQueue = QueueFactory.getDefaultQueue();
         for (String table : PersistenceMetadata.getInstance().getPersistedTables()) {
             deferredTask = new CleanTask(table);
-            defaultQueue.add(TaskOptions.Builder.withDefaults().payload(deferredTask));
+            defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
         }
         nav.redirect(PagePath.INDEX);
     }
