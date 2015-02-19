@@ -1,4 +1,4 @@
-package it.polimi.kundera.web;
+package it.polimi.test.web;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

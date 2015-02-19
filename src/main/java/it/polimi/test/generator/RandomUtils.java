@@ -1,4 +1,4 @@
-package it.polimi.kundera.generate;
+package it.polimi.test.generator;
 
 import java.util.Random;
 import java.util.UUID;
@@ -20,5 +20,13 @@ public class RandomUtils {
 
     public static Long randomLong() {
         return random().nextLong();
+    }
+
+    public static int randomInt() {
+        return random().nextInt();
+    }
+
+    public static int randomInt(int range) {
+        return random().nextInt(range);
     }
 }

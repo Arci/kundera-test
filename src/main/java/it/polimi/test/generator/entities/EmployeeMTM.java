@@ -14,20 +14,27 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package it.polimi.kundera.entities;
+package it.polimi.test.generator.entities;
 
-import it.polimi.kundera.generate.RandomUtils;
-import it.polimi.kundera.generate.Randomizable;
+import it.polimi.test.generator.RandomUtils;
+import it.polimi.test.generator.Randomizable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Data
+@ToString(exclude = "projects")
+@EqualsAndHashCode(exclude = "projects")
 @NoArgsConstructor
 @Entity
-@Table(name = "EmployeeMTO", schema = "gae@pu")
-public class EmployeeMTO implements Randomizable<EmployeeMTO> {
+@Table(name = "EmployeeMTM", schema = "gae@pu")
+public class EmployeeMTM implements Randomizable<EmployeeMTM> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,16 +47,22 @@ public class EmployeeMTO implements Randomizable<EmployeeMTO> {
     @Column(name = "SALARY")
     private Long salary;
 
-    /* many employees work in one department */
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "DEPARTMENT_ID")
-    private Department department;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "EMPLOYEE_PROJECT", joinColumns = {@JoinColumn(name = "EMPLOYEE_ID")}, inverseJoinColumns = {@JoinColumn(name = "PROJECT_ID")})
+    private List<ProjectMTM> projects;
+
+    public void addProjects(ProjectMTM... projects) {
+        if (this.projects == null) {
+            this.projects = new ArrayList<ProjectMTM>();
+        }
+        Collections.addAll(this.projects, projects);
+    }
 
     @Override
-    public EmployeeMTO randomize() {
+    public EmployeeMTM randomize(Object dependency) {
         setName(RandomUtils.randomString());
         setSalary(RandomUtils.randomLong());
-        setDepartment(new Department().randomize());
+        setProjects((List<ProjectMTM>) dependency);
         return this;
     }
 }

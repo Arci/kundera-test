@@ -14,45 +14,42 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package it.polimi.kundera.entities;
+package it.polimi.test.generator.entities;
 
-import it.polimi.kundera.generate.RandomUtils;
-import it.polimi.kundera.generate.Randomizable;
+import it.polimi.test.generator.RandomUtils;
+import it.polimi.test.generator.Randomizable;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Collections;
-import java.util.List;
 
 @Data
-@ToString(exclude = "employees")
-@EqualsAndHashCode(exclude = "employees")
 @NoArgsConstructor
 @Entity
-@Table(name = "ProjectMTM", schema = "gae@pu")
-public class ProjectMTM implements Randomizable<ProjectMTM> {
+@Table(name = "EmployeeOTO", schema = "gae@pu")
+public class EmployeeOTO implements Randomizable<EmployeeOTO> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "PROJECT_ID")
+    @Column(name = "EMPLOYEE_ID")
     private String id;
 
     @Column(name = "NAME")
     private String name;
 
-    @ManyToMany(mappedBy = "projects")
-    private List<EmployeeMTM> employees;
+    @Column(name = "SALARY")
+    private Long salary;
 
-    public void addEmployees(EmployeeMTM... employees) {
-        Collections.addAll(this.employees, employees);
-    }
+    /* an employee have one and only one phone */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PHONE_ID")
+    private Phone phone;
 
     @Override
-    public ProjectMTM randomize() {
+    public EmployeeOTO randomize(Object dependency) {
         setName(RandomUtils.randomString());
+        setSalary(RandomUtils.randomLong());
+        setPhone((Phone) dependency);
         return this;
     }
 }

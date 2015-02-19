@@ -24,7 +24,7 @@
 	<!-- other servlet -->
 	<servlet>
 		<servlet-name>CleanServlet</servlet-name>
-		<servlet-class>it.polimi.kundera.web.servlet.CleanServlet</servlet-class>
+		<servlet-class>it.polimi.test.web.servlet.CleanServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>CleanServlet</servlet-name>
@@ -32,7 +32,7 @@
 	</servlet-mapping>
 	<servlet>
 		<servlet-name>GenerateServlet</servlet-name>
-		<servlet-class>it.polimi.kundera.web.servlet.GenerateServlet</servlet-class>
+		<servlet-class>it.polimi.test.web.servlet.GenerateServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>GenerateServlet</servlet-name>

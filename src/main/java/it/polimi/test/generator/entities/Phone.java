@@ -14,10 +14,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package it.polimi.kundera.entities;
+package it.polimi.test.generator.entities;
 
-import it.polimi.kundera.generate.RandomUtils;
-import it.polimi.kundera.generate.Randomizable;
+import it.polimi.test.generator.RandomUtils;
+import it.polimi.test.generator.Randomizable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,30 +26,20 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "EmployeeOTO", schema = "gae@pu")
-public class EmployeeOTO implements Randomizable<EmployeeOTO> {
+@Table(name = "Phone", schema = "gae@pu")
+public class Phone implements Randomizable<Phone> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "EMPLOYEE_ID")
+    @Column(name = "PHONE_ID")
     private String id;
 
-    @Column(name = "NAME")
-    private String name;
-
-    @Column(name = "SALARY")
-    private Long salary;
-
-    /* an employee have one and only one phone */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "PHONE_ID")
-    private Phone phone;
+    @Column(name = "NUMBER")
+    private Long number;
 
     @Override
-    public EmployeeOTO randomize() {
-        setName(RandomUtils.randomString());
-        setSalary(RandomUtils.randomLong());
-        setPhone(new Phone().randomize());
+    public Phone randomize(Object dependency) {
+        setNumber(RandomUtils.randomLong());
         return this;
     }
 }

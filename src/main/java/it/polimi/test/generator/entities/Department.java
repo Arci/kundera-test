@@ -14,10 +14,10 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package it.polimi.kundera.entities;
+package it.polimi.test.generator.entities;
 
-import it.polimi.kundera.generate.RandomUtils;
-import it.polimi.kundera.generate.Randomizable;
+import it.polimi.test.generator.RandomUtils;
+import it.polimi.test.generator.Randomizable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,23 +27,19 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(schema = "gae@pu")
-public class Employee implements Randomizable<Employee> {
+public class Department implements Randomizable<Department> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "EMPLOYEE_ID")
+    @Column(name = "DEPARTMENT_ID")
     private String id;
 
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "SALARY")
-    private Long salary;
-
     @Override
-    public Employee randomize() {
+    public Department randomize(Object dependency) {
         setName(RandomUtils.randomString());
-        setSalary(RandomUtils.randomLong());
         return this;
     }
 }

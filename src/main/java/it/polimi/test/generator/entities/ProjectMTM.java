@@ -14,32 +14,45 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
-package it.polimi.kundera.entities;
+package it.polimi.test.generator.entities;
 
-import it.polimi.kundera.generate.RandomUtils;
-import it.polimi.kundera.generate.Randomizable;
+import it.polimi.test.generator.RandomUtils;
+import it.polimi.test.generator.Randomizable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Collections;
+import java.util.List;
 
 @Data
+@ToString(exclude = "employees")
+@EqualsAndHashCode(exclude = "employees")
 @NoArgsConstructor
 @Entity
-@Table(name = "Phone", schema = "gae@pu")
-public class Phone implements Randomizable<Phone> {
+@Table(name = "ProjectMTM", schema = "gae@pu")
+public class ProjectMTM implements Randomizable<ProjectMTM> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "PHONE_ID")
+    @Column(name = "PROJECT_ID")
     private String id;
 
-    @Column(name = "NUMBER")
-    private Long number;
+    @Column(name = "NAME")
+    private String name;
+
+    @ManyToMany(mappedBy = "projects")
+    private List<EmployeeMTM> employees;
+
+    public void addEmployees(EmployeeMTM... employees) {
+        Collections.addAll(this.employees, employees);
+    }
 
     @Override
-    public Phone randomize() {
-        setNumber(RandomUtils.randomLong());
+    public ProjectMTM randomize(Object dependency) {
+        setName(RandomUtils.randomString());
         return this;
     }
 }
