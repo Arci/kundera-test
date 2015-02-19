@@ -23,10 +23,19 @@ import java.util.Map;
 public class GenerateServlet extends Controller {
 
     private static final long serialVersionUID = 1L;
-    private static final int GEN_NUMBER = 10;
+    private int quantity;
 
     @Override
     protected void get(Navigation nav) throws IOException, ServletException {
+
+        String quantity = nav.getRequest().getParameter("quantity");
+        try {
+            this.quantity = Integer.valueOf(quantity);
+        } catch (Exception e) {
+            nav.getRequest().setAttribute("message", "[" + quantity + "] is malformed");
+            nav.fwd(PagePath.ERROR);
+            return;
+        }
 
         pushTask(Department.class, EmployeeMTO.class, GenerateTask.DependencyType.SINGLE);
 
@@ -46,13 +55,13 @@ public class GenerateServlet extends Controller {
 
     private void pushTask(Class master) {
         Queue defaultQueue = QueueFactory.getDefaultQueue();
-        DeferredTask deferredTask = new GenerateTask(GEN_NUMBER, master);
+        DeferredTask deferredTask = new GenerateTask(quantity, master);
         defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
     }
 
     private void pushTask(Class master, Class slave, GenerateTask.DependencyType type) {
         Queue defaultQueue = QueueFactory.getDefaultQueue();
-        DeferredTask deferredTask = new GenerateTask(GEN_NUMBER, master, slave, type);
+        DeferredTask deferredTask = new GenerateTask(quantity, master, slave, type);
         defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
     }
 }
@@ -66,7 +75,7 @@ class GenerateTask implements DeferredTask {
     private int quantity;
 
     public enum DependencyType {
-        SINGLE, COLLECTION;
+        SINGLE, COLLECTION
     }
 
     public GenerateTask(int quantity, Class master) {

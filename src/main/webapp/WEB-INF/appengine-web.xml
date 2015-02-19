@@ -7,4 +7,9 @@
 	<system-properties>
 		<property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
 	</system-properties>
+
+	<!-- Custom -->
+	<admin-console>
+		<page name="Application index" url="/index.jsp" />
+	</admin-console>
 </appengine-web-app>

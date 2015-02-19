@@ -4,6 +4,7 @@
 	<title>Kundera Test</title>
 </head>
 <body>
-<h1><a href="/">Ops! this is awkward ...</a></h1>
+	<h3><a href="/">Back</a></h3>
+	<p>${message}</p>
 </body>
 </html>
