@@ -1,11 +1,10 @@
 # kundera-test
-The application provides a servlet to generate data and store them in Datastore through CPIM and Kundera GAE Datastore extension.
-To generate the entities visit `index.jsp` and use the form to generate the desired number of entities.
-Entities generation is achieved issuing tasks on the default queue.
+The application provides the same behavior as [hegira-generator](https://github.com/Arci/hegira-generator) but due to the app engine 30 seconds servlet deadline, generation and cleanup are exploited using [Task Queues](https://cloud.google.com/appengine/docs/java/taskqueue/).
 
-To easily cleanup the datastore a clean up servlet is provided.
-The servlet queries the Datastore through the [Metadata API](https://cloud.google.com/appengine/docs/java/datastore/metadataqueries) retrieving all the persisted Kind(s).
-A task per Kind is pushed responsible for deleting all the entities of that Kind.
+All operation can be initiated from `index.jsp`:
+
+- to generate the entities use the form specifying the amount of entities to generate.
+- to cleanup the datastore simply click on the provided link
 
 A remote API servlet is also available, see [web.xml](https://github.com/Arci/kundera-test/blob/master/src/main/webapp/WEB-INF/web.xml).
 
