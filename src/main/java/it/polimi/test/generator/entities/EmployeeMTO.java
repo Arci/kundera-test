@@ -26,11 +26,10 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "EmployeeMTO", schema = "gae@pu")
+@Table(schema = "gae@pu")
 public class EmployeeMTO implements Randomizable<EmployeeMTO> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "EMPLOYEE_ID")
     private String id;
 
@@ -40,8 +39,7 @@ public class EmployeeMTO implements Randomizable<EmployeeMTO> {
     @Column(name = "SALARY")
     private Long salary;
 
-    /* many employees work in one department */
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "DEPARTMENT_ID")
     private Department department;
 

@@ -21,7 +21,10 @@ import it.polimi.test.generator.Randomizable;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor
@@ -30,7 +33,6 @@ import javax.persistence.*;
 public class Department implements Randomizable<Department> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "DEPARTMENT_ID")
     private String id;
 

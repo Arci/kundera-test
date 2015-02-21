@@ -10,6 +10,6 @@
 
 	<!-- Custom -->
 	<admin-console>
-		<page name="Application index" url="/index.jsp" />
+		<page name="Application index" url="/index.jsp"/>
 	</admin-console>
 </appengine-web-app>

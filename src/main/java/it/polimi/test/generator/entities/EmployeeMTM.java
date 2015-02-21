@@ -24,8 +24,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -33,11 +31,10 @@ import java.util.List;
 @EqualsAndHashCode(exclude = "projects")
 @NoArgsConstructor
 @Entity
-@Table(name = "EmployeeMTM", schema = "gae@pu")
+@Table(schema = "gae@pu")
 public class EmployeeMTM implements Randomizable<EmployeeMTM> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "EMPLOYEE_ID")
     private String id;
 
@@ -47,16 +44,9 @@ public class EmployeeMTM implements Randomizable<EmployeeMTM> {
     @Column(name = "SALARY")
     private Long salary;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "EMPLOYEE_PROJECT", joinColumns = {@JoinColumn(name = "EMPLOYEE_ID")}, inverseJoinColumns = {@JoinColumn(name = "PROJECT_ID")})
     private List<ProjectMTM> projects;
-
-    public void addProjects(ProjectMTM... projects) {
-        if (this.projects == null) {
-            this.projects = new ArrayList<ProjectMTM>();
-        }
-        Collections.addAll(this.projects, projects);
-    }
 
     @Override
     public EmployeeMTM randomize(Object dependency) {

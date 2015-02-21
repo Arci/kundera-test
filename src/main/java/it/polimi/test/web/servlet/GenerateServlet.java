@@ -2,6 +2,7 @@ package it.polimi.test.web.servlet;
 
 import com.google.appengine.api.taskqueue.*;
 import it.polimi.modaclouds.cpimlibrary.entitymng.CloudEntityManager;
+import it.polimi.modaclouds.cpimlibrary.entitymng.migration.SeqNumberProvider;
 import it.polimi.modaclouds.cpimlibrary.mffactory.MF;
 import it.polimi.test.generator.RandomUtils;
 import it.polimi.test.generator.Randomizable;
@@ -99,6 +100,7 @@ class GenerateTask implements DeferredTask {
         log.info("Generating [" + quantity + "] entities for master class [" + master.getSimpleName() + "]");
         entities.put(master, generate(quantity, master));
 
+        SeqNumberProvider.getInstance().setOffset(master.getSimpleName(), quantity * 2);
         for (Object o : entities.get(master)) {
             em.persist(o);
         }
@@ -107,6 +109,7 @@ class GenerateTask implements DeferredTask {
             log.info("Generating [" + quantity + "] entities for slave class [" + slave.getSimpleName() + "]");
             entities.put(slave, generate(quantity, slave, entities.get(master), type));
 
+            SeqNumberProvider.getInstance().setOffset(slave.getSimpleName(), quantity * 2);
             for (Object o : entities.get(slave)) {
                 em.persist(o);
             }
