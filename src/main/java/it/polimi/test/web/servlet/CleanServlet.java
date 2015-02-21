@@ -2,7 +2,6 @@ package it.polimi.test.web.servlet;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.taskqueue.*;
-import it.polimi.modaclouds.cpimlibrary.entitymng.PersistenceMetadata;
 import it.polimi.test.web.Controller;
 import it.polimi.test.web.Navigation;
 import it.polimi.test.web.PagePath;
@@ -20,13 +19,13 @@ public class CleanServlet extends Controller {
 
     @Override
     protected void get(Navigation nav) throws IOException, ServletException {
-        for (String table : PersistenceMetadata.getInstance().getPersistedTables()) {
-            pushTask(table);
+        Query query = new Query(Entities.KIND_METADATA_KIND);
+        DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
+
+        for (Entity entity : datastoreService.prepare(query).asIterable()) {
+            pushTask(entity.getKey().getName());
         }
-        // fix for join table
-        pushTask("EMPLOYEE_PROJECT");
-        // YCSB table
-        pushTask("usertable");
+
         nav.redirect(PagePath.INDEX);
     }
 
@@ -35,9 +34,9 @@ public class CleanServlet extends Controller {
         get(nav);
     }
 
-    private void pushTask(String table) {
+    private void pushTask(String kind) {
         Queue defaultQueue = QueueFactory.getDefaultQueue();
-        DeferredTask deferredTask = new CleanTask(table);
+        DeferredTask deferredTask = new CleanTask(kind);
         defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
     }
 }
@@ -46,15 +45,14 @@ public class CleanServlet extends Controller {
 @AllArgsConstructor
 class CleanTask implements DeferredTask {
 
-    private String table;
+    private String kind;
 
     @Override
     public void run() {
-        log.info("deleting all entities from table [" + table + "]");
+        log.info("deleting all entities of kind [" + kind + "]");
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        Query query = new Query(table).setKeysOnly();
+        Query query = new Query(kind).setKeysOnly();
         for (Entity entity : datastore.prepare(query).asList(FetchOptions.Builder.withDefaults())) {
-            log.info("kind= [" + entity.getKind() + "], key =[" + entity.getKey() + "]");
             datastore.delete(entity.getKey());
         }
     }
