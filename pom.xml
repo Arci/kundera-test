@@ -42,11 +42,25 @@
 			<version>2.0-SNAPSHOT</version>
 		</dependency>
 
+		<!-- modified Kundera core (locally installed)  -->
+		<dependency>
+			<groupId>com.impetus.kundera.core</groupId>
+			<artifactId>kundera-core</artifactId>
+			<version>2.16-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Kundera client (locally installed) -->
 		<dependency>
 			<groupId>com.impetus.kundera.client</groupId>
 			<artifactId>kundera-gae-datastore</artifactId>
 			<version>${kundera.version}</version>
+			<!-- exclude Kundera to include the modified version -->
+			<exclusions>
+				<exclusion>
+					<groupId>com.impetus.kundera.core</groupId>
+					<artifactId>kundera-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Lombok -->
