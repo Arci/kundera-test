@@ -54,14 +54,15 @@ public class GenerateServlet extends Controller {
     }
 
     private void pushTask(Class master) {
-        Queue defaultQueue = QueueFactory.getDefaultQueue();
-        DeferredTask deferredTask = new GenerateTask(quantity, master);
-        defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
+        pushTask(new GenerateTask(quantity, master));
     }
 
     private void pushTask(Class master, Class slave, GenerateTask.DependencyType type) {
+        pushTask(new GenerateTask(quantity, master, slave, type));
+    }
+
+    private void pushTask(DeferredTask deferredTask) {
         Queue defaultQueue = QueueFactory.getDefaultQueue();
-        DeferredTask deferredTask = new GenerateTask(quantity, master, slave, type);
         defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
     }
 }

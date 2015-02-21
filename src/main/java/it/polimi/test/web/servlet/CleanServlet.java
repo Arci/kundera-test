@@ -35,8 +35,11 @@ public class CleanServlet extends Controller {
     }
 
     private void pushTask(String kind) {
+        pushTask(new CleanTask(kind));
+    }
+
+    private void pushTask(DeferredTask deferredTask) {
         Queue defaultQueue = QueueFactory.getDefaultQueue();
-        DeferredTask deferredTask = new CleanTask(kind);
         defaultQueue.add(TaskOptions.Builder.withRetryOptions(RetryOptions.Builder.withTaskRetryLimit(0)).payload(deferredTask));
     }
 }
