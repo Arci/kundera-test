@@ -12,6 +12,7 @@ import lombok.extern.java.Log;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
+@Log
 @NoArgsConstructor
 public class CleanServlet extends Controller {
 
@@ -23,7 +24,12 @@ public class CleanServlet extends Controller {
         DatastoreService datastoreService = DatastoreServiceFactory.getDatastoreService();
 
         for (Entity entity : datastoreService.prepare(query).asIterable()) {
-            pushTask(entity.getKey().getName());
+            String kind = entity.getKey().getName();
+            if (kind.startsWith("__")) {
+                log.info("skipping kind [" + kind + "]");
+                continue;
+            }
+            pushTask(kind);
         }
 
         nav.redirect(PagePath.INDEX);
