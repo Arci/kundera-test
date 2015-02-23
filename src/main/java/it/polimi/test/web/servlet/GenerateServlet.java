@@ -71,6 +71,7 @@ public class GenerateServlet extends Controller {
 @Log
 class GenerateTask implements DeferredTask {
 
+    private static final int MAX_OFFSET = 100;
     private Class master;
     private Class slave;
     private DependencyType type;
@@ -100,7 +101,7 @@ class GenerateTask implements DeferredTask {
         log.info("Generating [" + quantity + "] entities for master class [" + master.getSimpleName() + "]");
         entities.put(master, generate(quantity, master));
 
-        SeqNumberProvider.getInstance().setOffset(master.getSimpleName(), quantity * 2);
+        setSeqNumberOffset(master.getSimpleName(), quantity);
         for (Object o : entities.get(master)) {
             em.persist(o);
         }
@@ -109,11 +110,21 @@ class GenerateTask implements DeferredTask {
             log.info("Generating [" + quantity + "] entities for slave class [" + slave.getSimpleName() + "]");
             entities.put(slave, generate(quantity, slave, entities.get(master), type));
 
-            SeqNumberProvider.getInstance().setOffset(slave.getSimpleName(), quantity * 2);
+            setSeqNumberOffset(slave.getSimpleName(), quantity);
             for (Object o : entities.get(slave)) {
                 em.persist(o);
             }
         }
+    }
+
+    private void setSeqNumberOffset(String tableName, int quantity) {
+        int offset;
+        if (quantity >= MAX_OFFSET || (quantity * 2) >= MAX_OFFSET) {
+            offset = MAX_OFFSET;
+        } else {
+            offset = quantity * 2;
+        }
+        SeqNumberProvider.getInstance().setOffset(tableName, offset);
     }
 
     private List generate(int quantity, Class<? extends Randomizable> clazz) {
